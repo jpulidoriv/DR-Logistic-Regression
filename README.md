@@ -6,24 +6,24 @@ This project compares two ways to predict whether a hotel booking will be cancel
 
 For booking $i$, the model computes a score $z_i = w^\top x_i + b$, where $y_i = 1$ denotes a cancellation. In the code’s 0/1 label convention, the logistic loss is
 
-$$
-\ell(z,y) = \log(1 + e^z) - yz.
-$$
+```math
+\ell(z,y) = \log(1 + e^z) - yz
+```
 
 The implementation uses the dual formulation from [Shafieezadeh-Abadeh, Mohajerin Esfahani and Kuhn (2015)](https://arxiv.org/abs/1509.09259). For each booking, it compares the loss under the recorded label with the loss under the opposite label, adjusted for the cost $\kappa$ of changing a label:
 
-$$
-s_i = \max\bigl\{\ell(z_i,y_i),\ \ell(z_i,1-y_i)-\lambda\kappa\bigr\}.
-$$
+```math
+s_i = \max\left(\ell(z_i,y_i),\ \ell(z_i,1-y_i)-\lambda\kappa\right)
+```
 
 The resulting training objective is
 
-$$
+```math
 \min_{w,b,\lambda}\quad \lambda\varepsilon + \frac{1}{N}\sum_{i=1}^{N}s_i
-\qquad \text{subject to} \qquad \lVert w\rVert_2 \leq \lambda.
-$$
+\qquad \text{subject to} \qquad \lVert w\rVert_2 \leq \lambda
+```
 
-The training loop evaluates both losses with PyTorch’s binary cross-entropy on logits. After each gradient step, it projects the weights and the dual variable $\lambda$ back onto the constraint. The intercept $b$ is fitted separately from that projection.
+The training loop evaluates both losses with PyTorch’s binary cross-entropy on logits. After each gradient step, it projects the weights and the dual variable $\lambda$ back onto the constraint. The optimizer updates the intercept $b$ along with the weights, but the projection applies only to $w$ and $\lambda$.
 
 ## Hotel booking results
 
