@@ -1,4 +1,4 @@
-# Wasserstein distributionally robust logistic regression
+# Wasserstein Distributionally Robust Logistic Regression
 
 This project compares two ways to predict whether a hotel booking will be canceled. Standard logistic regression minimizes the average loss on the training bookings. The robust model minimizes the worst-case expected loss over distributions within a Wasserstein distance $\varepsilon$ of the training distribution.
 
