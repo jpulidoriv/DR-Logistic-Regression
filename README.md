@@ -1,10 +1,10 @@
 # Wasserstein distributionally robust logistic regression
 
-This project compares two ways to predict whether a hotel booking will be canceled. Both use a linear classifier in PyTorch. Standard logistic regression minimizes the average loss on the training bookings. The robust model minimizes the worst-case expected loss over distributions within a Wasserstein distance $\varepsilon$ of the training distribution.
+This project compares two ways to predict whether a hotel booking will be canceled. Standard logistic regression minimizes the average loss on the training bookings. The robust model minimizes the worst-case expected loss over distributions within a Wasserstein distance $\varepsilon$ of the training distribution.
 
 ## Training objective
 
-For booking $i$, the model computes a score $z_i = w^\top x_i + b$, where $y_i = 1$ denotes a cancellation. In the code’s 0/1 label convention, the logistic loss is
+For booking $i$, the model computes a score $z_i = w^\top x_i + b$, where $y_i = 1$ denotes a cancellation. The logistic loss is
 
 ```math
 \ell(z,y) = \log(1 + e^z) - yz
@@ -22,8 +22,6 @@ The resulting training objective is
 \min_{w,b,\lambda}\quad \lambda\varepsilon + \frac{1}{N}\sum_{i=1}^{N}s_i
 \qquad \text{subject to} \qquad \lVert w\rVert_2 \leq \lambda
 ```
-
-The training loop evaluates both losses with PyTorch’s binary cross-entropy on logits. After each gradient step, it projects the weights and the dual variable $\lambda$ back onto the constraint. The optimizer updates the intercept $b$ along with the weights, but the projection applies only to $w$ and $\lambda$.
 
 ## Hotel booking results
 
